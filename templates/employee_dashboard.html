@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Employee Dashboard</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+```
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+```
+<div>
+
+    <h2>Warehouse</h2>
+
+</div>
+
+
+<div>
+
+    <span>
+        {{ session["employee_name"] }}
+    </span>
+
+
+    <a
+        href="{{ url_for('logout') }}"
+        class="logout-button">
+
+        Logout
+
+    </a>
+
+</div>
+```
+
+</header>
+
+<main class="dashboard">
+
+```
+<!-- ================================= -->
+<!-- EMPLOYEE DEPARTMENT -->
+<!-- ================================= -->
+
+<h1>
+    {{ department|title }} Orders
+</h1>
+
+
+
+<!-- ================================= -->
+<!-- FLASH MESSAGES -->
+<!-- ================================= -->
+
+{% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="success-message">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endwith %}
+
+
+
+<!-- ================================= -->
+<!-- ORDERS -->
+<!-- ================================= -->
+
+{% if orders %}
+
+
+    <div class="order-grid">
+
+
+        {% for order in orders %}
+
+
+            <div class="order-card">
+
+
+                <!-- ================================= -->
+                <!-- ORDER HEADER -->
+                <!-- ================================= -->
+
+                <div class="order-header">
+
+
+                    <h3>
+
+                        Order ID:
+                        {{ order["order_number"] }}
+
+                    </h3>
+
+
+                    <span class="status">
+
+                        {{ order["status"] }}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <!-- ================================= -->
+                <!-- ITEM -->
+                <!-- ================================= -->
+
+                <p>
+
+                    <strong>Item:</strong>
+
+                    {{ order["item_name"] }}
+
+                </p>
+
+
+
+                <!-- ================================= -->
+                <!-- QUANTITY -->
+                <!-- ================================= -->
+
+                <p>
+
+                    <strong>Quantity:</strong>
+
+                    {{ order["quantity"] }}
+
+                </p>
+
+
+
+                <!-- ================================= -->
+                <!-- PICKING EMPLOYEE -->
+                <!-- ================================= -->
+
+                {% if department == "picking" %}
+
+
+                    {% if order["status"] == "Assigned"
+                          or order["status"] == "Picking" %}
+
+
+                        <a
+                            href="{{ url_for(
+                                'picking',
+                                order_id=order['id']
+                            ) }}"
+                            class="btn btn-primary">
+
+                            Complete Picking
+
+                        </a>
+
+
+                    {% endif %}
+
+
+                <!-- ================================= -->
+                <!-- PACKING EMPLOYEE -->
+                <!-- ================================= -->
+
+                {% elif department == "packing" %}
+
+
+                    {% if order["status"] == "Assigned"
+                          or order["status"] == "Picked" %}
+
+
+                        <a
+                            href="{{ url_for(
+                                'packing',
+                                order_id=order['id']
+                            ) }}"
+                            class="btn btn-primary">
+
+                            Complete Packing
+
+                        </a>
+
+
+                    {% endif %}
+
+
+                <!-- ================================= -->
+                <!-- LOADING EMPLOYEE -->
+                <!-- ================================= -->
+
+                {% elif department == "loading" %}
+
+
+                    {% if order["status"] == "Assigned"
+                          or order["status"] == "Packed" %}
+
+
+                        <a
+                            href="{{ url_for(
+                                'loading',
+                                order_id=order['id']
+                            ) }}"
+                            class="btn btn-primary">
+
+                            Complete Loading
+
+                        </a>
+
+
+                    {% endif %}
+
+
+                {% endif %}
+
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+{% else %}
+
+
+    <!-- ================================= -->
+    <!-- NO ORDERS -->
+    <!-- ================================= -->
+
+    <div class="empty-box">
+
+
+        <h3>
+
+            No {{ department|title }} Orders
+
+        </h3>
+
+
+        <p>
+
+            New orders will appear here.
+
+        </p>
+
+
+    </div>
+
+
+{% endif %}
+```
+
+</main>
+
+<script
+    src="{{ url_for('static', filename='js/app.js') }}">
+</script>
+
+</body>
+
+</html>

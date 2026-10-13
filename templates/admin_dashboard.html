@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Warehouse Admin Dashboard
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f3f6fb;
+
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            background: #111827;
+
+            color: white;
+
+            padding: 16px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .navbar h2 {
+
+            margin: 0;
+
+            font-size: 21px;
+        }
+
+
+        .logout {
+
+            text-decoration: none;
+
+            background: #ef4444;
+
+            color: white;
+
+            padding: 9px 16px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 95%;
+
+            max-width: 1300px;
+
+            margin: 30px auto;
+        }
+
+
+        .page-title {
+
+            margin-bottom: 25px;
+        }
+
+
+        .page-title h1 {
+
+            margin-bottom: 5px;
+        }
+
+
+        .page-title p {
+
+            margin-top: 0;
+
+            color: #6b7280;
+        }
+
+
+        /* =========================
+           STATUS CARDS
+        ========================= */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .card {
+
+            background: white;
+
+            padding: 22px 15px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.07);
+
+            text-align: center;
+        }
+
+
+        .card h3 {
+
+            margin: 0 0 12px;
+
+            color: #6b7280;
+
+            font-size: 15px;
+        }
+
+
+        .count {
+
+            font-size: 34px;
+
+            font-weight: bold;
+
+            color: #111827;
+        }
+
+
+        /* =========================
+           ORDERS BOX
+        ========================= */
+
+        .orders-box {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.07);
+        }
+
+
+        .orders-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 20px;
+        }
+
+
+        .orders-header h2 {
+
+            margin: 0;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-responsive {
+
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            min-width: 850px;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            background: #f8fafc;
+
+            color: #374151;
+
+            text-align: left;
+
+            padding: 13px;
+
+            font-size: 14px;
+
+            border-bottom:
+                2px solid #e5e7eb;
+        }
+
+
+        td {
+
+            padding: 13px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+
+        tr:hover {
+
+            background: #f9fafb;
+        }
+
+
+        .order-number {
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            background: #e5e7eb;
+        }
+
+
+        .empty {
+
+            text-align: center;
+
+            color: #6b7280;
+
+            padding: 30px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 1000px) {
+
+            .cards {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media(max-width: 600px) {
+
+            .container {
+
+                width: 94%;
+
+                margin-top: 20px;
+            }
+
+
+            .cards {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap: 10px;
+            }
+
+
+            .card {
+
+                padding: 17px 8px;
+            }
+
+
+            .count {
+
+                font-size: 28px;
+            }
+
+
+            .navbar {
+
+                padding: 14px 16px;
+            }
+
+
+            .navbar h2 {
+
+                font-size: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================
+     NAVBAR
+================================= -->
+
+<div class="navbar">
+
+    <h2>
+        🏭 Warehouse Admin
+    </h2>
+
+
+    <a
+        href="{{ url_for('logout') }}"
+        class="logout"
+    >
+        Logout
+    </a>
+
+</div>
+
+
+<!-- =================================
+     MAIN
+================================= -->
+
+<div class="container">
+
+
+   <div class="page-title">
+
+    <h1>
+        Admin Dashboard
+    </h1>
+
+    <p>
+        Live Warehouse Order Tracking
+    </p>
+
+    <a
+        href="{{ url_for('admin_add_product') }}"
+        style="
+            display: inline-block;
+            margin-top: 15px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+        "
+    >
+        + Add Product
+    </a>
+
+</div>
+
+
+    <!-- =================================
+         FLASH MESSAGE
+    ================================= -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div
+                    style="
+                        background:#dcfce7;
+                        color:#166534;
+                        padding:12px;
+                        border-radius:8px;
+                        margin-bottom:15px;
+                    "
+                >
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================
+         STATUS CARDS
+    ================================= -->
+
+    <div class="cards">
+
+
+        <!-- TOTAL -->
+
+        <div class="card">
+
+            <h3>
+                TOTAL ORDERS
+            </h3>
+
+            <div class="count">
+                {{ total_orders }}
+            </div>
+
+        </div>
+
+
+        <!-- PICKING -->
+
+        <div class="card">
+
+            <h3>
+                PICKING
+            </h3>
+
+            <div class="count">
+                {{ picking_orders }}
+            </div>
+
+        </div>
+
+
+        <!-- PACKING -->
+
+        <div class="card">
+
+            <h3>
+                PACKING
+            </h3>
+
+            <div class="count">
+                {{ packing_orders }}
+            </div>
+
+        </div>
+
+
+        <!-- LOADING -->
+
+        <div class="card">
+
+            <h3>
+                LOADING
+            </h3>
+
+            <div class="count">
+                {{ loading_orders }}
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETED -->
+
+        <div class="card">
+
+            <h3>
+                COMPLETED
+            </h3>
+
+            <div class="count">
+                {{ completed_orders }}
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================
+         ALL ORDERS
+    ================================= -->
+
+    <div class="orders-box">
+
+
+        <div class="orders-header">
+
+            <h2>
+                All Orders
+            </h2>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Order No
+                        </th>
+
+                        <th>
+                            Item
+                        </th>
+
+                        <th>
+                            Quantity
+                        </th>
+
+                        <th>
+                            Employee ID
+                        </th>
+
+                        <th>
+                            Employee
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for order in orders %}
+
+
+                    <tr>
+
+
+                        <td
+                            class="order-number"
+                        >
+                            {{ order.order_number }}
+                        </td>
+
+
+                        <td>
+                            {{ order.item_name }}
+                        </td>
+
+
+                        <td>
+                            {{ order.quantity }}
+                        </td>
+
+
+                        <td>
+                            {{ order.employee_id or '-' }}
+                        </td>
+
+
+                        <td>
+                            {{ order.employee_name or '-' }}
+                        </td>
+
+
+                        <td>
+                            {{ order.department or '-' }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="status">
+
+                                {{ order.status }}
+
+                            </span>
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% else %}
+
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty"
+                        >
+
+                            No Orders Available
+
+                        </td>
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

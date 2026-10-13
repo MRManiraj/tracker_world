@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Products</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f3f6fb;
+        }
+
+        .navbar {
+
+            background: #111827;
+
+            color: white;
+
+            padding: 16px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .navbar h2 {
+
+            margin: 0;
+        }
+
+        .back {
+
+            color: white;
+
+            text-decoration: none;
+        }
+
+        .container {
+
+            width: 94%;
+
+            max-width: 1100px;
+
+            margin: 30px auto;
+        }
+
+        .products {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .product-card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.07);
+        }
+
+        .product-card h3 {
+
+            margin-top: 0;
+        }
+
+        .price {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+        .stock {
+
+            color: #16a34a;
+
+            font-weight: bold;
+        }
+
+        .product-card form {
+
+            margin-top: 18px;
+        }
+
+        .product-card input {
+
+            width: 80px;
+
+            padding: 9px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+        }
+
+        .product-card button {
+
+            padding: 10px 15px;
+
+            border: none;
+
+            background: #2563eb;
+
+            color: white;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .empty {
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            text-align: center;
+        }
+
+        @media(max-width: 800px) {
+
+            .products {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div class="navbar">
+
+    <h2>
+        Products
+    </h2>
+
+    <a
+        href="{{ url_for('customer_dashboard') }}"
+        class="back"
+    >
+        Dashboard
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+    <div class="products">
+
+
+        {% for product in products %}
+
+
+            <div class="product-card">
+
+
+                <h3>
+                    {{ product.product_name }}
+                </h3>
+
+
+                <p>
+                    {{ product.description }}
+                </p>
+
+
+                <div class="price">
+
+                    ₹{{ product.price }}
+
+                </div>
+
+
+                <p class="stock">
+
+                    Stock:
+                    {{ product.stock }}
+
+                </p>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'customer_place_order',
+                        product_id=product.id
+                    ) }}"
+                >
+
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        max="{{ product.stock }}"
+                        required
+                    >
+
+
+                    <button type="submit">
+
+                        PLACE ORDER
+
+                    </button>
+
+
+                </form>
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'customer_add_to_cart',
+                        product_id=product.id
+                    ) }}"
+                    style="margin-top: 10px;"
+                >
+
+                    <input
+                        type="hidden"
+                        name="quantity"
+                        value="1"
+                    >
+
+                        <button
+                            type="submit"
+                            style="
+                                width: 100%;
+                                padding: 11px;
+                                border: none;
+                                border-radius: 8px;
+                                background: #111827;
+                                color: white;
+                                font-weight: bold;
+                                cursor: pointer;
+                                "
+                    >
+                    Add to Cart
+                    </button>
+
+                </form>
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                No Products Available
+
+            </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <h1>Warehouse</h1>
+
+        <p class="subtitle">
+            Employee Login
+        </p>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+        <form method="POST">
+
+            <label>
+                Employee ID
+            </label>
+
+            <input
+                type="text"
+                name="employee_id"
+                placeholder="Enter Employee ID"
+                required
+            >
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter Password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="primary-button">
+
+                Login
+
+            </button>
+
+        </form>
+
+        <a
+            href="{{ url_for('admin_login') }}"
+            class="admin-link">
+
+            Admin Login
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

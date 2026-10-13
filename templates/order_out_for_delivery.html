@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Order Out for Delivery - Warehouse</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+
+    <div class="logo">
+
+        Warehouse
+
+    </div>
+
+
+    <div class="user-area">
+
+        <span>
+            {{ session["employee_name"] }}
+        </span>
+
+
+        <a href="{{ url_for('logout') }}">
+
+            Logout
+
+        </a>
+
+    </div>
+
+
+</header>
+
+
+
+<main class="page-container">
+
+
+    <div class="order-card">
+
+
+        <div style="font-size: 60px; text-align: center;">
+
+            ✓
+
+        </div>
+
+
+
+        <h1 style="text-align: center;">
+
+            ORDER OUT FOR DELIVERY
+
+        </h1>
+
+
+
+        <hr>
+
+
+
+        <h2>
+
+            Order ID:
+            {{ order["order_number"] }}
+
+        </h2>
+
+
+
+        <p>
+
+            <strong>Item:</strong>
+
+            {{ order["item_name"] }}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Quantity:</strong>
+
+            {{ order["quantity"] }}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {{ order["status"] }}
+
+        </p>
+
+
+
+        <p style="text-align: center; margin-top: 25px;">
+
+            This order has completed
+            the warehouse process
+            and is now out for delivery.
+
+        </p>
+
+
+
+        <br>
+
+
+
+        <div style="text-align: center;">
+
+            <a href="{{ url_for('employee_dashboard') }}"
+               class="primary-button">
+
+                BACK TO DASHBOARD
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+
+
+<script src="{{ url_for('static', filename='js/app.js') }}">
+</script>
+
+
+</body>
+
+</html>

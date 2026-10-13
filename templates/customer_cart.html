@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Cart</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 16px 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        .message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .cart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .info {
+            margin-bottom: 8px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .subtotal {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        .actions {
+            margin-top: 18px;
+
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quantity-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 10px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 7px;
+        }
+
+        .update-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+
+            padding: 10px 16px;
+            border-radius: 7px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            border: none;
+            background: #dc2626;
+            color: white;
+
+            padding: 10px 16px;
+            border-radius: 7px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .summary {
+            background: white;
+
+            border-radius: 12px;
+            padding: 22px;
+
+            margin-top: 25px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+
+            font-size: 22px;
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+
+            border: none;
+
+            background: #16a34a;
+            color: white;
+
+            padding: 14px;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .place-order-btn:hover {
+            background: #15803d;
+        }
+
+        .empty {
+            background: white;
+
+            padding: 45px 20px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .view-products {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 11px 20px;
+
+            background: #2563eb;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 14px;
+            }
+
+            .navbar a {
+                margin-left: 8px;
+                font-size: 13px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .quantity-form {
+                width: 100%;
+            }
+
+            .quantity-input {
+                flex: 1;
+            }
+
+            .update-btn {
+                flex: 1;
+            }
+
+            .remove-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h2>
+        My Cart
+    </h2>
+
+    <div>
+
+        <a href="{{ url_for('customer_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('customer_products') }}">
+            Products
+        </a>
+
+        <a href="{{ url_for('customer_orders') }}">
+            My Orders
+        </a>
+
+        <a href="{{ url_for('customer_logout') }}">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="page-title">
+
+        <h1>
+            Shopping Cart
+        </h1>
+
+        <p>
+            Review your products before placing the order
+        </p>
+
+    </div>
+
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if cart_items %}
+
+
+        {% for item in cart_items %}
+
+            <div class="cart-card">
+
+                <div class="product-name">
+
+                    {{ item.product_name }}
+
+                </div>
+
+
+                {% if item.description %}
+
+                    <div class="description">
+
+                        {{ item.description }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="info">
+
+                    Price:
+
+                    ₹{{ item.price }}
+
+                </div>
+
+
+                <div class="info">
+
+                    Available Stock:
+
+                    {{ item.stock }}
+
+                </div>
+
+
+                <div class="info">
+
+                    Quantity:
+
+                    {{ item.quantity }}
+
+                </div>
+
+
+                <div class="subtotal">
+
+                    Subtotal:
+
+                    ₹{{ item.subtotal }}
+
+                </div>
+
+
+                <div class="actions">
+
+
+                    <!-- UPDATE QUANTITY -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'customer_update_cart',
+                            cart_id=item.cart_id
+                        ) }}"
+                        class="quantity-form"
+                    >
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="{{ item.quantity }}"
+                            min="1"
+                            max="{{ item.stock }}"
+                            class="quantity-input"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="update-btn"
+                        >
+
+                            Update Quantity
+
+                        </button>
+
+                    </form>
+
+
+                    <!-- REMOVE PRODUCT -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'customer_remove_cart',
+                            cart_id=item.cart_id
+                        ) }}"
+                    >
+
+                        <button
+                            type="submit"
+                            class="remove-btn"
+                        >
+
+                            Remove
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+        <div class="summary">
+
+            <div class="total">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ₹{{ cart_total }}
+                </span>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'customer_cart_place_order'
+                ) }}"
+            >
+
+                <button
+                    type="submit"
+                    class="place-order-btn"
+                >
+
+                    PLACE ORDER
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            <h2>
+                Your Cart is Empty
+            </h2>
+
+            <p style="margin-top:10px; color:#6b7280;">
+
+                Add products to your cart.
+
+            </p>
+
+            <a
+                href="{{ url_for('customer_products') }}"
+                class="view-products"
+            >
+
+                View Products
+
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>

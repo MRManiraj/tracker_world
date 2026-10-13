@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Picking - Warehouse</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div>
+        <h2>Warehouse</h2>
+    </div>
+
+    <div>
+
+        <span>
+            {{ session["employee_name"] }}
+        </span>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="dashboard">
+
+    <h1>Picking Order</h1>
+
+
+    <div class="order-card">
+
+        <div class="order-header">
+
+            <h3>
+                Order ID:
+                {{ order["order_number"] }}
+            </h3>
+
+            <span class="status">
+                PICKING
+            </span>
+
+        </div>
+
+
+        <p>
+            <strong>Item:</strong>
+            {{ order["item_name"] }}
+        </p>
+
+
+        <p>
+            <strong>Quantity:</strong>
+            {{ order["quantity"] }}
+        </p>
+
+
+        <p>
+            <strong>Status:</strong>
+            {{ order["status"] }}
+        </p>
+
+
+        <br>
+
+
+        <form method="POST">
+
+    <label for="barcode">
+        <strong>Scan / Enter Barcode:</strong>
+    </label>
+
+    <br><br>
+
+    <input type="text"
+           id="barcode"
+           name="barcode"
+           placeholder="Enter Barcode"
+           required>
+
+    <br><br>
+
+    <button type="submit"
+            class="primary-button">
+
+        COMPLETE PICKING
+
+    </button>
+
+</form>
+
+    </div>
+
+</main>
+
+
+<script src="{{ url_for('static', filename='js/app.js') }}">
+</script>
+
+</body>
+
+</html>
